@@ -1,3 +1,4 @@
+import { images } from "./data.mjs";
 const selectors = document.querySelectorAll(".input_select");
 const results = document.querySelectorAll(".output_result");
 const button = document.getElementById("submit_form");
@@ -97,15 +98,35 @@ button.addEventListener("click", (e) => {
   e.preventDefault();
 });
 
+const icons = document.querySelectorAll(".icon_image");
+const iconDetails = document.querySelectorAll(".icon_details h4");
+
 function showInputValues() {
   let arr = [];
   selectors.forEach((selector) => {
-    arr.push(selector.value.split("_").join(" "));
+    if (selector.value === "-") arr.push("not_applicable");
+    else arr.push(selector.value);
   });
-  let str = `Showing results for <b>${arr[0]}</b>(channel), <b>${arr[1]}</b>
-  (partner/placement),
-  <b>${arr[2]}</b>(platform), <b>${arr[3]}</b>(App Status), <b>${arr[4]}</b>(IDFA Status (source)),
-  <b>${arr[5]}</b>(IDFA Status(Client app))`;
 
-  document.querySelector(".current_selected_inputs").innerHTML = str;
+  icons.forEach((icon, index) => {
+    let input = arr[index].toLowerCase();
+    let src = images[index][input];
+    let str = `<img  src=${src} alt=${input} />`;
+    icon.innerHTML = str;
+  });
+
+  iconDetails.forEach((value, index) => {
+    let input = arr[index].split("_").join(" ");
+
+    value.textContent = input;
+  });
+
+  document.querySelector(".icon_container").classList.add("active");
+
+  // let str = `Showing results for <b>${arr[0]}</b>(channel), <b>${arr[1]}</b>
+  // (partner/placement),
+  // <b>${arr[2]}</b>(platform), <b>${arr[3]}</b>(App Status), <b>${arr[4]}</b>(IDFA Status (source)),
+  // <b>${arr[5]}</b>(IDFA Status(Client app))`;
+
+  // document.querySelector(".current_selected_inputs").innerHTML = str;
 }
